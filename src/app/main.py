@@ -21,11 +21,12 @@ from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_ollama import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain.prompts import ChatPromptTemplate, PromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_ollama import ChatOllama
 from langchain_core.runnables import RunnablePassthrough
-from langchain.retrievers.multi_query import MultiQueryRetriever
+from pydantic import BaseModel, field_validator
+# from langchain_community.retrievers import MultiQueryRetriever
 from typing import List, Tuple, Dict, Any, Optional
 
 # Set protobuf environment variable to avoid error messages
@@ -38,7 +39,6 @@ PERSIST_DIRECTORY = os.path.join("data", "vectors")
 # Streamlit page configuration
 st.set_page_config(
     page_title="Ollama PDF RAG Streamlit UI",
-    page_icon="🎈",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -148,11 +148,10 @@ def process_question(question: str, vector_db: Chroma, selected_model: str) -> s
     )
 
     # Set up retriever
-    retriever = MultiQueryRetriever.from_llm(
-        vector_db.as_retriever(), 
-        llm,
-        prompt=QUERY_PROMPT
-    )
+    retriever = vector_db.as_retriever(
+    search_kwargs={"k": 4}
+)
+
 
     # RAG prompt template
     template = """Answer the question based ONLY on the following context:
@@ -227,7 +226,7 @@ def main() -> None:
     """
     Main function to run the Streamlit application.
     """
-    st.subheader("🧠 Ollama PDF RAG playground", divider="gray", anchor=False)
+    st.subheader("Ollama PDF RAG playground", divider="gray", anchor=False)
 
     # Get available models
     models_info = ollama.list()
@@ -274,7 +273,7 @@ def main() -> None:
                 with st.spinner("Processing sample PDF..."):
                     loader = UnstructuredPDFLoader(file_path=sample_path)
                     data = loader.load()
-                    text_splitter = RecursiveCharacterTextSplitter(chunk_size=7500, chunk_overlap=100)
+                    text_splitter = RecursiveCharacterTextSplitter(chunk_size=7500, chunk_overlap=150)
                     chunks = text_splitter.split_documents(data)
                     st.session_state["vector_db"] = Chroma.from_documents(
                         documents=chunks,
