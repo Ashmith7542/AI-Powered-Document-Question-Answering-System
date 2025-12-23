@@ -122,10 +122,11 @@ Role-based user access
 
 👨‍💻 Author
 
-Ashmith Hamilpure
-Komarraju Shivasai
-Porandla Sreeja
-Drona Madhuri Dadi
+Ashmith Hamilpure,
+Komarraju Shivasai,
+Porandla Sreeja,
+Drona Madhuri Dadi.
+
 Final Year Academic Project
 AI-Powered Document Question Answering System
 
