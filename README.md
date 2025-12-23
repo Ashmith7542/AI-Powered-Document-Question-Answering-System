@@ -1,200 +1,138 @@
-# 🤖 Chat with PDF locally using Ollama + LangChain
+🤖 AI-Powered Document Question Answering System
 
-A powerful local RAG (Retrieval Augmented Generation) application that lets you chat with your PDF documents using Ollama and LangChain. This project includes both a Jupyter notebook for experimentation and a Streamlit web interface for easy interaction.
+An AI-powered local Document Question Answering system that enables users to interact with PDF documents using Retrieval-Augmented Generation (RAG). The system processes documents locally using Ollama, LangChain, ChromaDB, and Streamlit, ensuring complete data privacy and offline operation.
 
-[![Python Tests](https://github.com/tonykipkemboi/ollama_pdf_rag/actions/workflows/tests.yml/badge.svg)](https://github.com/tonykipkemboi/ollama_pdf_rag/actions/workflows/tests.yml)
+📌 Project Overview
 
-## Project Structure
-```
-ollama_pdf_rag/
-├── src/                      # Source code
-│   ├── app/                  # Streamlit application
-│   │   ├── components/       # UI components
-│   │   │   ├── chat.py      # Chat interface
-│   │   │   ├── pdf_viewer.py # PDF display
-│   │   │   └── sidebar.py   # Sidebar controls
-│   │   └── main.py          # Main app
-│   └── core/                 # Core functionality
-│       ├── document.py       # Document processing
-│       ├── embeddings.py     # Vector embeddings
-│       ├── llm.py           # LLM setup
-│       └── rag.py           # RAG pipeline
-├── data/                     # Data storage
-│   ├── pdfs/                # PDF storage
-│   │   └── sample/          # Sample PDFs
-│   └── vectors/             # Vector DB storage
-├── notebooks/               # Jupyter notebooks
-│   └── experiments/         # Experimental notebooks
-├── tests/                   # Unit tests
-├── docs/                    # Documentation
-└── run.py                   # Application runner
-```
+This project allows users to:
 
-## 📺 Video Tutorial
-<a href="https://youtu.be/ztBJqzBU5kc">
-  <img src="https://img.youtube.com/vi/ztBJqzBU5kc/hqdefault.jpg" alt="Watch the video" width="100%">
-</a>
+Upload PDF documents
 
-## ✨ Features
+Ask natural language questions
 
-- 🔒 Fully local processing - no data leaves your machine
-- 📄 PDF processing with intelligent chunking
-- 🧠 Multi-query retrieval for better context understanding
-- 🎯 Advanced RAG implementation using LangChain
-- 🖥️ Clean Streamlit interface
-- 📓 Jupyter notebook for experimentation
+Retrieve accurate, context-aware answers from the document
 
-## 🚀 Getting Started
+It uses semantic search and large language models to eliminate the need for manually searching through lengthy documents.
 
-### Prerequisites
+🧠 System Architecture
 
-1. **Install Ollama**
-   - Visit [Ollama's website](https://ollama.ai) to download and install
-   - Pull required models:
-     ```bash
-     ollama pull llama3.2  # or your preferred model
-     ollama pull nomic-embed-text
-     ```
+The system follows a RAG (Retrieval-Augmented Generation) pipeline:
 
-2. **Clone Repository**
-   ```bash
-   git clone https://github.com/tonykipkemboi/ollama_pdf_rag.git
-   cd ollama_pdf_rag
-   ```
+PDF text extraction
 
-3. **Set Up Environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: .\venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
+Text chunking
 
-   Key dependencies and their versions:
-   ```txt
-   ollama==0.4.4
-   streamlit==1.40.0
-   pdfplumber==0.11.4
-   langchain==0.1.20
-   langchain-core==0.1.53
-   langchain-ollama==0.0.2
-   chromadb==0.4.22
-   ```
+Embedding generation
 
-### 🎮 Running the Application
+Vector storage and retrieval
 
-#### Option 1: Streamlit Interface
-```bash
-python run.py
-```
-Then open your browser to `http://localhost:8501`
+Context-aware answer generation using a local LLM
 
-![Streamlit UI](st_app_ui.png)
-*Streamlit interface showing PDF viewer and chat functionality*
+✨ Features
 
-#### Option 2: Jupyter Notebook
-```bash
-jupyter notebook
-```
-Open `updated_rag_notebook.ipynb` to experiment with the code
+📄 Upload and process PDF documents
 
-## 💡 Usage Tips
+🔍 Semantic search using vector embeddings
 
-1. **Upload PDF**: Use the file uploader in the Streamlit interface or try the sample PDF
-2. **Select Model**: Choose from your locally available Ollama models
-3. **Ask Questions**: Start chatting with your PDF through the chat interface
-4. **Adjust Display**: Use the zoom slider to adjust PDF visibility
-5. **Clean Up**: Use the "Delete Collection" button when switching documents
+🧠 Local LLM-based answer generation (Ollama)
 
-## 🤝 Contributing
+🔒 Fully offline and privacy-preserving
 
-Feel free to:
-- Open issues for bugs or suggestions
-- Submit pull requests
-- Comment on the YouTube video for questions
-- Star the repository if you find it useful!
+🖥️ Interactive Streamlit web interface
 
-## ⚠️ Troubleshooting
+⚡ Efficient handling of large documents
 
-- Ensure Ollama is running in the background
-- Check that required models are downloaded
-- Verify Python environment is activated
-- For Windows users, ensure WSL2 is properly configured if using Ollama
+🛠️ Technologies Used
 
-### Common Errors
+Python – Core programming language
 
-#### ONNX DLL Error
-If you encounter this error:
-```
-DLL load failed while importing onnx_copy2py_export: a dynamic link Library (DLL) initialization routine failed.
-```
+LangChain – RAG pipeline orchestration
 
-Try these solutions:
-1. Install Microsoft Visual C++ Redistributable:
-   - Download and install both x64 and x86 versions from [Microsoft's official website](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
-   - Restart your computer after installation
+pdfplumber – PDF text extraction
 
-2. If the error persists, try installing ONNX Runtime manually:
-   ```bash
-   pip uninstall onnxruntime onnxruntime-gpu
-   pip install onnxruntime
-   ```
+Nomic-embed-text – Embedding generation
 
-#### CPU-Only Systems
-If you're running on a CPU-only system:
+ChromaDB – Vector database
 
-1. Ensure you have the CPU version of ONNX Runtime:
-   ```bash
-   pip uninstall onnxruntime-gpu  # Remove GPU version if installed
-   pip install onnxruntime  # Install CPU-only version
-   ```
+Ollama (Llama 3.2) – Local LLM inference
 
-2. You may need to modify the chunk size in the code to prevent memory issues:
-   - Reduce `chunk_size` to 500-1000 if you experience memory problems
-   - Increase `chunk_overlap` for better context preservation
+Streamlit – User interface
 
-Note: The application will run slower on CPU-only systems, but it will still work effectively.
+🚀 Installation & Setup
+Prerequisites
 
-## 🧪 Testing
+Python 3.9 or above
 
-### Running Tests
-```bash
-# Run all tests
-python -m unittest discover tests
+Ollama installed locally
 
-# Run tests verbosely
-python -m unittest discover tests -v
-```
+Step 1: Install Ollama Models
+ollama pull llama3.2
+ollama pull nomic-embed-text
 
-### Pre-commit Hooks
-The project uses pre-commit hooks to ensure code quality. To set up:
+Step 2: Clone the Repository
+git clone https://github.com/Ashmith7542/AI-Powered-Document-Question-Answering-System.git
+cd AI-Powered-Document-Question-Answering-System
 
-```bash
-pip install pre-commit
-pre-commit install
-```
+Step 3: Create Virtual Environment
+python -m venv venv
+venv\Scripts\activate   # Windows
 
-This will:
-- Run tests before each commit
-- Run linting checks
-- Ensure code quality standards are met
+Step 4: Install Dependencies
+pip install -r requirements.txt
 
-### Continuous Integration
-The project uses GitHub Actions for CI. On every push and pull request:
-- Tests are run on multiple Python versions (3.9, 3.10, 3.11)
-- Dependencies are installed
-- Ollama models are pulled
-- Test results are uploaded as artifacts
+▶️ Running the Application
+streamlit run app.py
 
-## 📝 License
 
-This project is open source and available under the MIT License.
+Then open:
 
----
+http://localhost:8501
 
-## ⭐️ Star History
+💡 How to Use
 
-[![Star History Chart](https://api.star-history.com/svg?repos=tonykipkemboi/ollama_pdf_rag&type=Date)](https://star-history.com/#tonykipkemboi/ollama_pdf_rag&Date)
+Upload a PDF document
 
-Built with ❤️ by [Tony Kipkemboi!](https://tonykipkemboi.com)
+Wait for indexing to complete
 
-Follow me on [X](https://x.com/tonykipkemboi) | [LinkedIn](https://www.linkedin.com/in/tonykipkemboi/) | [YouTube](https://www.youtube.com/@tonykipkemboi) | [GitHub](https://github.com/tonykipkemboi)
+Enter a question related to the document
+
+View the generated answer
+
+📊 Performance & Reliability
+
+Handles medium to large PDFs efficiently
+
+Fast semantic retrieval using ChromaDB
+
+Accurate responses with minimal hallucination
+
+Stable performance on CPU-only systems
+
+🔮 Future Enhancements
+
+Multi-document support
+
+Advanced summarization
+
+Multilingual question answering
+
+Integration with more advanced LLMs
+
+Role-based user access
+
+👨‍💻 Author
+
+Ashmith Hamilpure
+Komarraju Shivasai
+Porandla Sreeja
+Drona Madhuri Dadi
+Final Year Academic Project
+AI-Powered Document Question Answering System
+
+✅ Following Steps
+
+After pasting this into README.md:
+
+git add README.md
+git commit -m "Updated README with project description"
+git push origin main
